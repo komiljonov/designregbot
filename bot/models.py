@@ -9,10 +9,11 @@ class Region(models.Model):
         return self.name
 
 class User(models.Model):
+    id: int
     chat_id = models.IntegerField()
     name = models.CharField(max_length=255)
     number = models.CharField(max_length=255)
-    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
+    region: Region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
 
 
 class Post(models.Model):
