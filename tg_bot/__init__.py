@@ -227,37 +227,13 @@ class Bot(Updater):
         for user in User.objects.all():
             try:
                 if context.user_data['post']['mediatype'] == 1:
-                    self.bot.send_photo(chat_id=user.chat_id,photo=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'], reply_markup=InlineKeyboardMarkup(
-                        [
-                            [
-                                InlineKeyboardButton("Tasdiqlash", callback_data="post_confirm"), InlineKeyboardButton("Qayta yozish", callback_data="post_retry")
-                            ]
-                        ]
-                    ))
+                    self.bot.send_photo(chat_id=user.chat_id,photo=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
                 elif context.user_data['post']['mediatype'] == 2:
-                    self.bot.send_video(chat_id=user.chat_id,video=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'], reply_markup=InlineKeyboardMarkup(
-                        [
-                            [
-                                InlineKeyboardButton("Tasdiqlash", callback_data="post_confirm"), InlineKeyboardButton("Qayta yozish", callback_data="post_retry")
-                            ]
-                        ]
-                    ))
+                    self.bot.send_video(chat_id=user.chat_id,video=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
                 elif context.user_data['post']['mediatype'] == 3:
-                    self.bot.send_document(chat_id=user.chat_id,document=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'], reply_markup=InlineKeyboardMarkup(
-                        [
-                            [
-                                InlineKeyboardButton("Tasdiqlash", callback_data="post_confirm"), InlineKeyboardButton("Qayta yozish", callback_data="post_retry")
-                            ]
-                        ]
-                    ))
+                    self.bot.send_document(chat_id=user.chat_id,document=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
                 else:
-                    self.bot.send_message(chat_id=user.chat_id,text=context.user_data['post']['com'], entities=context.user_data['post']['entities'], reply_markup=InlineKeyboardMarkup(
-                        [
-                            [
-                                InlineKeyboardButton("Tasdiqlash", callback_data="post_confirm"), InlineKeyboardButton("Qayta yozish", callback_data="post_retry")
-                            ]
-                        ]
-                    ))
+                    self.bot.send_message(chat_id=user.chat_id,text=context.user_data['post']['com'], entities=context.user_data['post']['entities'])
                 sent_users.append(user)
             except:
                 unsent_users.append(user)
