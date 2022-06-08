@@ -16,7 +16,7 @@ class User(models.Model):
 
 
 class Post(models.Model):
-    media: FieldFile = models.FileField(upload_to="post")
+    media: FieldFile = models.FileField(upload_to="post", null=True, blank=True)
     comment: str = RichTextField()
     mediatype: int = models.IntegerField(choices=[
         (0, 'text'),
