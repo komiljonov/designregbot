@@ -75,7 +75,7 @@ class Bot(Updater):
             }
             self.delete_old_message(context)
             
-            context.user_data['old_message'] = user.send_message("<b>Iltimos ismingizni yozing!</b>", parse_mode="HTML",)
+            context.user_data['old_message'] = user.send_message("<b>Iltimos ism va familyangizni yuboring!</b>", parse_mode="HTML",)
             return NAME
         else:
             user.send_message("<b>Siz ro'yxatdan o'tib bo'lgansiz!</b>", parse_mode="HTML")
@@ -101,7 +101,7 @@ class Bot(Updater):
         context.user_data["register"]['number'] = update.message.contact.phone_number
         self.delete_old_message(context)
         update.message.delete()
-        context.user_data['old_message'] = user.send_message("<b>Iltimos joylashgan shahar nomeringizni yozing!</b>", parse_mode="HTML", reply_markup=ReplyKeyboardMarkup(
+        context.user_data['old_message'] = user.send_message("<b>Iltimos viloyatingizni tanlang!</b>", parse_mode="HTML", reply_markup=ReplyKeyboardMarkup(
             distribute(
                 [region.name for region in Region.objects.all()],
                 2

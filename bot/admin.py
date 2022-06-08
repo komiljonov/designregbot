@@ -9,7 +9,7 @@ from bot.models import Post, Region, User
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('id','media', 'comment')
+    list_display = ('id', 'comment')
     
 
     def has_add_permission(self, request) -> bool:
