@@ -1,8 +1,9 @@
 from uuid import uuid4
 from django.db import models
 from ckeditor.fields import RichTextField
-# Create your models here.
 from django.db.models.fields.files import FieldFile
+
+
 class Region(models.Model):
     name = models.CharField(max_length=100)
     def __str__(self):
@@ -10,10 +11,11 @@ class Region(models.Model):
 
 class User(models.Model):
     id: int
-    chat_id = models.IntegerField()
+    chat_id = models.IntegerField(primary_key=True, unique=True)
     name = models.CharField(max_length=255)
     number = models.CharField(max_length=255)
     region: Region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
+    is_admin: bool = models.BooleanField(default=False)
 
 
 class Post(models.Model):
