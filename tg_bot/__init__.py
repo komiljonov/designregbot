@@ -1,8 +1,9 @@
 from ast import parse
+from datetime import datetime
 from telegram import *
 from telegram.ext import *
 from bot.models import Post, Region, User
-
+import xlsxwriter
 from utils import distribute
 
 
@@ -50,6 +51,10 @@ class Bot(Updater):
                     CommandHandler('start', self.start)
                 ]
             )
+        )
+
+        self.dispatcher.add_handler(
+            CommandHandler('data', self.data)
         )
 
 
@@ -103,7 +108,7 @@ class Bot(Updater):
         update.message.delete()
         context.user_data['old_message'] = user.send_message("<b>Iltimos viloyatingizni tanlang!</b>", parse_mode="HTML", reply_markup=ReplyKeyboardMarkup(
             distribute(
-                [region.name for region in Region.objects.all()],
+                [region.name for region in Region.objects.all().order_by('name')],
                 2
             ),resize_keyboard=True
         ))
@@ -256,4 +261,31 @@ class Bot(Updater):
 
 
         admin.send_message("Foydalanuvchilar {} ta.\nPost {} ta odamga yuborildi.\nPostni {} ta odamga yuborib bo'lmadi!".format( len(sent_users) + len(unsent_users), len(sent_users), len(unsent_users) )  )
+        return ConversationHandler.END
+
+    def data(self, update:Update, context:CallbackContext):
+        
+        print('Boshlandi')
+
+        # Create an new Excel file and add a worksheet.
+        data_name = f'data.xlsx'
+        workbook = xlsxwriter.Workbook(data_name)
+        worksheet = workbook.add_worksheet()
+        worksheet.write(0, 0, "ID")
+        worksheet.write(0, 1, "chat_id")
+        worksheet.write(0, 2, "name")
+        worksheet.write(0, 3, "number")
+        worksheet.write(0, 4, "region")
+        user: User
+        users = User.objects.all()
+        for _user in range(len(users)):
+            user: User = users[_user]
+            worksheet.write(_user+1, 0, user.id)
+            worksheet.write(_user+1, 1, user.chat_id)
+            worksheet.write(_user+1, 2, user.name)
+            worksheet.write(_user+1, 3, user.number)
+            worksheet.write(_user+1, 4, user.region.name)
+        
+        workbook.close()
+        update.message.reply_document(document=open(data_name, 'rb'), filename="data.xlsx")
         return ConversationHandler.END

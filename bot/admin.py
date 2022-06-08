@@ -10,6 +10,7 @@ from bot.models import Post, Region, User
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('id', 'comment')
+
     
 
     def has_add_permission(self, request) -> bool:
@@ -17,4 +18,13 @@ class PostAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Region)
-admin.site.register(User)
+
+
+
+
+
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'number', 'region')
+    search_fields = ('name', 'number', 'region__name')
