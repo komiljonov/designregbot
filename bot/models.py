@@ -11,7 +11,7 @@ class Region(models.Model):
 
 class User(models.Model):
     id: int
-    chat_id = models.IntegerField(primary_key=True, unique=True)
+    chat_id = models.IntegerField()
     name = models.CharField(max_length=255)
     number = models.CharField(max_length=255)
     region: Region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)

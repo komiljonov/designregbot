@@ -151,7 +151,7 @@ class Bot(Updater):
 
     def post(self, update:Update, context:CallbackContext):
         user = update.message.from_user
-        dbuser: User = User.objects.get(chat_id=user.id)
+        dbuser: User = User.objects.filter(chat_id=user.id).first()
         if dbuser:
             if dbuser.is_admin:
                 context.user_data['post'] = {}
@@ -268,7 +268,7 @@ class Bot(Updater):
 
     def data(self, update:Update, context:CallbackContext):
         user = update.message.from_user
-        dbuser: User = User.objects.get(chat_id=user.id)
+        dbuser: User = User.objects.filter(chat_id=user.id).first()
         if dbuser:
             if dbuser.is_admin:
                 data_name = f'data.xlsx'
