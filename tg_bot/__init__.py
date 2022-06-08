@@ -151,9 +151,12 @@ class Bot(Updater):
 
     def post(self, update:Update, context:CallbackContext):
         user = update.message.from_user
-        context.user_data['post'] = {}
-        user.send_message("Iltimos post uchun fayl yuboring!", reply_markup=ReplyKeyboardRemove())
-        return POST_MEDIA
+        dbuser: User = User.objects.get(chat_id=user.id)
+        if dbuser:
+            if dbuser.is_admin:
+                context.user_data['post'] = {}
+                user.send_message("Iltimos post uchun fayl yuboring!", reply_markup=ReplyKeyboardRemove())
+                return POST_MEDIA
     
     def post_media_photo(self, update:Update, context:CallbackContext):
         user = update.message.from_user
@@ -264,28 +267,28 @@ class Bot(Updater):
         return ConversationHandler.END
 
     def data(self, update:Update, context:CallbackContext):
-        
-        print('Boshlandi')
-
-        # Create an new Excel file and add a worksheet.
-        data_name = f'data.xlsx'
-        workbook = xlsxwriter.Workbook(data_name)
-        worksheet = workbook.add_worksheet()
-        worksheet.write(0, 0, "ID")
-        worksheet.write(0, 1, "chat_id")
-        worksheet.write(0, 2, "name")
-        worksheet.write(0, 3, "number")
-        worksheet.write(0, 4, "region")
-        user: User
-        users = User.objects.all()
-        for _user in range(len(users)):
-            user: User = users[_user]
-            worksheet.write(_user+1, 0, user.id)
-            worksheet.write(_user+1, 1, user.chat_id)
-            worksheet.write(_user+1, 2, user.name)
-            worksheet.write(_user+1, 3, user.number)
-            worksheet.write(_user+1, 4, user.region.name)
-        
-        workbook.close()
-        update.message.reply_document(document=open(data_name, 'rb'), filename="data.xlsx")
-        return ConversationHandler.END
+        user = update.message.from_user
+        dbuser: User = User.objects.get(chat_id=user.id)
+        if dbuser:
+            if dbuser.is_admin:
+                data_name = f'data.xlsx'
+                workbook = xlsxwriter.Workbook(data_name)
+                worksheet = workbook.add_worksheet()
+                worksheet.write(0, 0, "ID")
+                worksheet.write(0, 1, "chat_id")
+                worksheet.write(0, 2, "name")
+                worksheet.write(0, 3, "number")
+                worksheet.write(0, 4, "region")
+                user: User
+                users = User.objects.all()
+                for _user in range(len(users)):
+                    user: User = users[_user]
+                    worksheet.write(_user+1, 0, user.id)
+                    worksheet.write(_user+1, 1, user.chat_id)
+                    worksheet.write(_user+1, 2, user.name)
+                    worksheet.write(_user+1, 3, user.number)
+                    worksheet.write(_user+1, 4, user.region.name)
+                
+                workbook.close()
+                update.message.reply_document(document=open(data_name, 'rb'), filename="data.xlsx")
+                return ConversationHandler.END
