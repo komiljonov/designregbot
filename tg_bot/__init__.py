@@ -103,7 +103,7 @@ class Bot(Updater):
         update.message.delete()
         context.user_data['old_message'] = user.send_message("<b>Iltimos viloyatingizni tanlang!</b>", parse_mode="HTML", reply_markup=ReplyKeyboardMarkup(
             distribute(
-                [region.name for region in Region.objects.all()],
+                [region.name for region in Region.objects.all().order_by('name')],
                 2
             ),resize_keyboard=True
         ))
