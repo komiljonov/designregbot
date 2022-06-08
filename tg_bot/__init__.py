@@ -150,7 +150,8 @@ class Bot(Updater):
 
 
     def post(self, update:Update, context:CallbackContext):
-        user = update.message.from_user
+        user = update.message.from_user if update.message else update.callback_query.from_user
+
         dbuser: User = User.objects.filter(chat_id=user.id).first()
         if dbuser:
             if dbuser.is_admin:
