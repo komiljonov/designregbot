@@ -125,7 +125,7 @@ class Bot(Updater):
             User.objects.create(**context.user_data['register'], region=region)
             self.delete_old_message(context)
             update.message.delete()
-            context.user_data['old_message'] = user.send_message("<b>Muvaffaqiyatli ro'yxatdan o'tildi!</b>", parse_mode="HTML", reply_markup=ReplyKeyboardRemove())
+            context.user_data['old_message'] = user.send_message("<b>Siz muvaffaqiyatli ro'yxatdan o'tdingiz, siz bilan yaqin orada menedjerimiz bog'lanadi. Web Design Foundation kursida korishguncha!</b>", parse_mode="HTML", reply_markup=ReplyKeyboardRemove())
             post: Post = Post.objects.first()
             if post:
                 if post.mediatype == 0:
@@ -139,7 +139,7 @@ class Bot(Updater):
         else:
             self.delete_old_message(context)
             update.message.delete()
-            context.user_data['old_message'] = user.send_message("<b>Region not found!</b>", parse_mode="HTML", reply_markup=ReplyKeyboardMarkup(
+            context.user_data['old_message'] = user.send_message("<b>Kechirasiz viloyat topilmadi!</b>", parse_mode="HTML", reply_markup=ReplyKeyboardMarkup(
             distribute(
                 Region.objects.all(),
                 2
