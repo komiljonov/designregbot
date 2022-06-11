@@ -245,6 +245,7 @@ class Bot(Updater):
 
     def data(self, update:Update, context:CallbackContext):
         user = update.message.from_user
+        print('asdasd')
         dbuser: User = User.objects.filter(chat_id=user.id).first()
         if dbuser:
             if dbuser.is_admin:
@@ -256,6 +257,7 @@ class Bot(Updater):
                 worksheet.write(0, 2, "name")
                 worksheet.write(0, 3, "number")
                 worksheet.write(0, 4, "region")
+                worksheet.write(0, 5, "reg_date")
                 user: User
                 users = User.objects.all()
                 for _user in range(len(users)):
@@ -265,6 +267,7 @@ class Bot(Updater):
                     worksheet.write(_user+1, 2, user.name)
                     worksheet.write(_user+1, 3, user.number)
                     worksheet.write(_user+1, 4, user.region.name)
+                    worksheet.write(_user+1, 5, str(user.created_at))
                 
                 workbook.close()
                 update.message.reply_document(document=open(data_name, 'rb'), filename="data.xlsx")
