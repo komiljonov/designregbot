@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import uuid4
 from django.db import models
 from ckeditor.fields import RichTextField
@@ -16,6 +17,7 @@ class User(models.Model):
     number = models.CharField(max_length=255)
     region: Region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
     is_admin: bool = models.BooleanField(default=False)
+    created_at: datetime = models.DateTimeField(auto_now_add=True)
 
 
 class Post(models.Model):
