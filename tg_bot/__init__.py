@@ -286,7 +286,7 @@ class Bot(Updater):
                     start_worksheet.write(user.id, 0, user.id)
                     start_worksheet.write(user.id, 1, user.chat_id)
                 start_workbook.close()
-                update.message.reply_document(document=open(started_users_name, 'rb'), filename="data.xlsx")
+                update.message.reply_document(document=open(started_users_name, 'rb'), filename="started.xlsx")
 
 
                 return ConversationHandler.END
