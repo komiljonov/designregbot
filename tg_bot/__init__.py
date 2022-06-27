@@ -9,7 +9,7 @@ from utils import distribute
 
 from .constants import *
 
-NAME, NUMBER, REGION, POST_MEDIA, POST_TEXT, POST_CONFIRM, POST_USERS = range(6)
+NAME, NUMBER, REGION, POST_MEDIA, POST_TEXT, POST_CONFIRM, POST_USERS = range(7)
 
 class Bot(Updater):
     def __init__(self):
