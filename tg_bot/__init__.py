@@ -9,7 +9,7 @@ from utils import distribute
 
 from .constants import *
 
-NAME, NUMBER, REGION, POST_MEDIA, POST_TEXT, POST_CONFIRM = range(6)
+NAME, NUMBER, REGION, POST_MEDIA, POST_TEXT, POST_CONFIRM, POST_USERS = range(6)
 
 class Bot(Updater):
     def __init__(self):
@@ -31,6 +31,9 @@ class Bot(Updater):
                     ],
                     REGION: [
                         MessageHandler(Filters.text & not_start, self.region)
+                    ],
+                    POST_USERS: [
+                        MessageHandler(Filters.text & not_start, self.post_users)
                     ],
                     POST_MEDIA: [
                         MessageHandler(Filters.photo, self.post_media_photo),
@@ -158,8 +161,34 @@ class Bot(Updater):
         if dbuser:
             if dbuser.is_admin:
                 context.user_data['post'] = {}
-                user.send_message("Iltimos post uchun fayl yuboring!", reply_markup=ReplyKeyboardRemove())
-                return POST_MEDIA
+                # user.send_message("Iltimos post uchun fayl yuboring!", reply_markup=ReplyKeyboardRemove())
+                # return POST_MEDIA
+                user.send_message("Iltimos postni kimlarga yuborishni tanlang!", reply_markup=ReplyKeyboardMarkup(
+                    [
+                        [
+                            "Hammaga"
+                        ],
+                        [
+                            "Ro'yxatdan o'tganlarga",
+                            "Start bosganlarga"
+                        ]
+                    ]
+                ))
+                return POST_USERS
+    
+    def post_users(self, update:Update, context:CallbackContext):
+        user = update.message.from_user
+        users = update.message.text
+        if users == "Hammaga":
+            context.user_data['post']['users'] = 0
+        elif users == "Ro'yxatdan o'tganlarga":
+            context.user_data['post']['users'] = 1
+        elif users == "Start bosganlarga":
+            context.user_data['post']['users'] = 2
+        
+        user.send_message("Iltimos post uchun fayl yuboring!", reply_markup=ReplyKeyboardRemove())
+        return POST_MEDIA
+
     
     def post_media_photo(self, update:Update, context:CallbackContext):
         user = update.message.from_user
@@ -227,19 +256,61 @@ class Bot(Updater):
         admin = update.callback_query.from_user
         unsent_users = []
         sent_users = []
-        for user in User.objects.all():
-            try:
-                if context.user_data['post']['mediatype'] == 1:
-                    self.bot.send_photo(chat_id=user.chat_id,photo=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
-                elif context.user_data['post']['mediatype'] == 2:
-                    self.bot.send_video(chat_id=user.chat_id,video=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
-                elif context.user_data['post']['mediatype'] == 3:
-                    self.bot.send_document(chat_id=user.chat_id,document=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
-                else:
-                    self.bot.send_message(chat_id=user.chat_id,text=context.user_data['post']['com'], entities=context.user_data['post']['entities'])
-                sent_users.append(user)
-            except:
-                unsent_users.append(user)
+        if context.user_data['post']['users'] == 0:
+            for user in User.objects.all():
+                try:
+                    if context.user_data['post']['mediatype'] == 1:
+                        self.bot.send_photo(chat_id=user.chat_id,photo=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
+                    elif context.user_data['post']['mediatype'] == 2:
+                        self.bot.send_video(chat_id=user.chat_id,video=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
+                    elif context.user_data['post']['mediatype'] == 3:
+                        self.bot.send_document(chat_id=user.chat_id,document=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
+                    else:
+                        self.bot.send_message(chat_id=user.chat_id,text=context.user_data['post']['com'], entities=context.user_data['post']['entities'])
+                    sent_users.append(user)
+                except:
+                    unsent_users.append(user)
+            for user in Started.objects.all():
+                try:
+                    if context.user_data['post']['mediatype'] == 1:
+                        self.bot.send_photo(chat_id=user.chat_id,photo=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
+                    elif context.user_data['post']['mediatype'] == 2:
+                        self.bot.send_video(chat_id=user.chat_id,video=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
+                    elif context.user_data['post']['mediatype'] == 3:
+                        self.bot.send_document(chat_id=user.chat_id,document=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
+                    else:
+                        self.bot.send_message(chat_id=user.chat_id,text=context.user_data['post']['com'], entities=context.user_data['post']['entities'])
+                    sent_users.append(user)
+                except:
+                    unsent_users.append(user)
+        elif context.user_data['post']['users'] == 1:
+            for user in User.objects.all():
+                try:
+                    if context.user_data['post']['mediatype'] == 1:
+                        self.bot.send_photo(chat_id=user.chat_id,photo=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
+                    elif context.user_data['post']['mediatype'] == 2:
+                        self.bot.send_video(chat_id=user.chat_id,video=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
+                    elif context.user_data['post']['mediatype'] == 3:
+                        self.bot.send_document(chat_id=user.chat_id,document=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
+                    else:
+                        self.bot.send_message(chat_id=user.chat_id,text=context.user_data['post']['com'], entities=context.user_data['post']['entities'])
+                    sent_users.append(user)
+                except:
+                    unsent_users.append(user)
+        elif context.user_data['post']['users'] == 2:
+            for user in Started.objects.all():
+                try:
+                    if context.user_data['post']['mediatype'] == 1:
+                        self.bot.send_photo(chat_id=user.chat_id,photo=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
+                    elif context.user_data['post']['mediatype'] == 2:
+                        self.bot.send_video(chat_id=user.chat_id,video=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
+                    elif context.user_data['post']['mediatype'] == 3:
+                        self.bot.send_document(chat_id=user.chat_id,document=context.user_data['post']['file'], caption=context.user_data['post']['com'], caption_entities=context.user_data['post']['entities'])
+                    else:
+                        self.bot.send_message(chat_id=user.chat_id,text=context.user_data['post']['com'], entities=context.user_data['post']['entities'])
+                    sent_users.append(user)
+                except:
+                    unsent_users.append(user)
 
 
         admin.send_message("Foydalanuvchilar {} ta.\nPost {} ta odamga yuborildi.\nPostni {} ta odamga yuborib bo'lmadi!".format( len(sent_users) + len(unsent_users), len(sent_users), len(unsent_users) )  )
