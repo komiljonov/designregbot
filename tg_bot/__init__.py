@@ -2,7 +2,7 @@ from ast import parse
 from datetime import datetime
 from telegram import *
 from telegram.ext import *
-from bot.models import Post, Region, User
+from bot.models import Post, Region, Started, User
 import xlsxwriter
 from utils import distribute
 
@@ -73,6 +73,7 @@ class Bot(Updater):
         
     def start(self, update:Update, context:CallbackContext):
         user = update.message.from_user
+        Started.objects.get_or_create(chat_id=user.id)
         dbuser = User.objects.filter(chat_id=user.id).first()
         if not dbuser:
             context.user_data['register'] = {
@@ -123,6 +124,7 @@ class Bot(Updater):
         region = Region.objects.filter(name=update.message.text).first()
         if region:
             User.objects.create(**context.user_data['register'], region=region)
+            Started.objects.filter(chat_id=user.id).delete()
             self.delete_old_message(context)
             update.message.delete()
             context.user_data['old_message'] = user.send_message("<b>✅ Siz muvaffaqiyatli ro‘yxatdan o‘tdingiz, siz bilan yaqin orada menedjerimiz bog‘lanadi. Web Design Foundation kursida ko‘rishguncha!</b>", parse_mode="HTML", reply_markup=ReplyKeyboardRemove())
@@ -271,4 +273,20 @@ class Bot(Updater):
                 
                 workbook.close()
                 update.message.reply_document(document=open(data_name, 'rb'), filename="data.xlsx")
+
+
+
+
+                started_users_name = 'started.xlsx'
+                start_workbook = xlsxwriter.Workbook(started_users_name)
+                start_worksheet = start_workbook.add_worksheet()
+                start_worksheet.write(0, 0, "ID")
+                start_worksheet.write(0, 1, "chat_id")
+                for user in range(len(Started.objects.all())):
+                    start_worksheet.write(user.id, 0, user.id)
+                    start_worksheet.write(user.id, 1, user.chat_id)
+                start_workbook.close()
+                update.message.reply_document(document=open(started_users_name, 'rb'), filename="data.xlsx")
+
+
                 return ConversationHandler.END

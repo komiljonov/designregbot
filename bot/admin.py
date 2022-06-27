@@ -3,6 +3,7 @@ from django.contrib import admin
 
 from bot.models import Post, Region, User
 
+
 # Register your models here.
 
 
