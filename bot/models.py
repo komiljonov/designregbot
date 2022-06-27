@@ -35,3 +35,9 @@ class Post(models.Model):
     @property
     def file(self):
         return open(f"{self.media.path}", 'rb')
+
+
+
+class Started(models.Model):
+    chat_id = models.IntegerField()
+    
