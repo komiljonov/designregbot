@@ -282,7 +282,9 @@ class Bot(Updater):
                 start_worksheet = start_workbook.add_worksheet()
                 start_worksheet.write(0, 0, "ID")
                 start_worksheet.write(0, 1, "chat_id")
-                for user in range(len(Started.objects.all())):
+                ___users = StartedUser.objects.all()
+                for __user in range(len(___users)):
+                    user = ___users[__user]
                     start_worksheet.write(user.id, 0, user.id)
                     start_worksheet.write(user.id, 1, user.chat_id)
                 start_workbook.close()
