@@ -141,7 +141,9 @@ class Bot(Updater):
                 elif post.mediatype == 2:
                     user.send_video(post.file, caption=post.com, parse_mode="HTML")
                 elif post.mediatype == 2:
+                    print('sendfile')
                     user.send_document(post.file, caption=post.com, parse_mode="HTML")
+                    print('sent')
                 
                 
             
