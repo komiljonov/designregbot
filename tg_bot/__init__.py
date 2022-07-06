@@ -14,6 +14,7 @@ NAME, NUMBER, REGION, POST_MEDIA, POST_TEXT, POST_CONFIRM, POST_USERS = range(7)
 
 class Bot(Updater):
     def __init__(self):
+        print('dfgdfgdfgdfg')
         super().__init__(TOKEN)
         not_start = ~Filters.regex("^/start")
 
