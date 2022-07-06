@@ -27,6 +27,7 @@ class Post(models.Model):
         (0, 'text'),
         (1, 'image'),
         (2, 'video'),
+        (3, 'doc')
     ])
     @property
     def com(self) -> str:
