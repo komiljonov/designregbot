@@ -7,6 +7,7 @@ import xlsxwriter
 from utils import distribute
 
 
+
 from .constants import *
 
 NAME, NUMBER, REGION, POST_MEDIA, POST_TEXT, POST_CONFIRM, POST_USERS = range(7)
@@ -139,6 +140,9 @@ class Bot(Updater):
                     user.send_photo(post.file, caption=post.com, parse_mode="HTML")
                 elif post.mediatype == 2:
                     user.send_video(post.file, caption=post.com, parse_mode="HTML")
+                elif post.mediatype == 2:
+                    user.send_document(post.file, caption=post.com, parse_mode="HTML")
+                
                 
             
         else:
