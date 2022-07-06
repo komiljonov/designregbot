@@ -143,6 +143,7 @@ class Bot(Updater):
                 elif post.mediatype == 2:
                     print('sendfile')
                     user.send_document(post.file, caption=post.com, parse_mode="HTML")
+                    print('sent')
                 
                 
             
