@@ -135,13 +135,14 @@ class Bot(Updater):
             context.user_data['old_message'] = user.send_message("<b>✅ Siz muvaffaqiyatli ro‘yxatdan o‘tdingiz, siz bilan yaqin orada menedjerimiz bog‘lanadi. Web Design Foundation kursida ko‘rishguncha!</b>", parse_mode="HTML", reply_markup=ReplyKeyboardRemove())
             post: Post = Post.objects.first()
             if post:
+                print(post.mediatype, post.media)
                 if post.mediatype == 0:
                     user.send_message(post.com, parse_mode="HTML")
                 elif post.mediatype == 1:
                     user.send_photo(post.file, caption=post.com, parse_mode="HTML")
                 elif post.mediatype == 2:
                     user.send_video(post.file, caption=post.com, parse_mode="HTML")
-                elif post.mediatype == 2:
+                elif post.mediatype == 3:
                     print('sendfile')
                     user.send_document(post.file, caption=post.com, parse_mode="HTML")
                     print('sent')
