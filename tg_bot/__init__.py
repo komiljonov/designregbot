@@ -132,7 +132,7 @@ class Bot(Updater):
             Started.objects.filter(chat_id=user.id).delete()
             self.delete_old_message(context)
             update.message.delete()
-            context.user_data['old_message'] = user.send_message("<b>✅ Siz muvaffaqiyatli ro‘yxatdan o‘tdingiz, siz bilan yaqin orada menedjerimiz bog‘lanadi. Web Design Foundation kursida ko‘rishguncha!</b>", parse_mode="HTML", reply_markup=ReplyKeyboardRemove())
+            context.user_data['old_message'] = user.send_message("<b>✅ Siz muvaffaqiyatli ro‘yxatdan o‘tdingiz.</b>", parse_mode="HTML", reply_markup=ReplyKeyboardRemove())
             post: Post = Post.objects.first()
             if post:
                 print(post.mediatype, post.media)
